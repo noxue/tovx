@@ -1,23 +1,47 @@
-import logo from './logo.svg';
 import './App.css';
+import Clipboard from 'react-clipboard.js';
+import { useEffect, useState } from 'react';
+import axios from 'axios';
 
 function App() {
+  const [weixin, setWeixin] = useState("");
+  const [icon, setIcon] = useState("");
+  const [ok, setOk] = useState(false);
+  const [images, setImages] = useState([]);
+  useEffect(() => {
+
+    axios.get("./data.json?="+Math.random()).then((res) => {
+      if (res.status !== 200) {
+        alert(res.statusText)
+        return;
+      }
+      console.log(res.data)
+      setWeixin(res.data.weixin)
+      setIcon(res.data.icon)
+      setOk(res.data.ok)
+      setImages(res.data.images)
+      document.body.title = res.data.title
+    })
+
+
+  }, [])
+
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+
+      {
+        images.map((img,i)=>{
+          console.log(img)
+          return <img class="img" src={img} key={i} />
+        })
+      }
+      <div class="copy-btn" hidden={!ok}>
+        <Clipboard data-clipboard-text={weixin} onClick={() => {
+          window.location.href = "weixin://"
+        }}></Clipboard>
+        <img src={icon} />
+      </div>
+
     </div>
   );
 }

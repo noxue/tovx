@@ -1,0 +1,9 @@
+{
+    "ok":true,
+    "weixin":"noxuecom",
+    "icon":"./btn.png",
+    "images":[
+        "./1.jpg",
+        "./2.jpg"
+    ]
+}
